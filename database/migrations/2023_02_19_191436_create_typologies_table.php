@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('typologies', function (Blueprint $table) {
             $table->id();
+            
+            $table -> string('code', 5) -> unique();
+            $table -> string('name', 32);
+            $table -> boolean('digital') -> default(false);
+
             $table->timestamps();
         });
     }
