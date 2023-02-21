@@ -18,13 +18,62 @@ class MainController extends Controller
         return view('pages.home', compact('categories'));
 
     }
+    public function productHome() {
 
+        $products = Product :: all();
+
+        return view('pages.products.productHome', compact('products'));
+    }
     public function productCreate() {
 
         $typologies = Typology::all();
         $categories = Category::all();
 
-        return view('pages.productCreate', compact('typologies', 'categories'));
+        return view('pages.products.create', compact('typologies', 'categories'));
+
+    }
+    public function productDelete(Product $product) {
+
+        $product -> categories() -> sync([]);
+
+        $product -> delete();
+
+        return redirect() -> route('productHome');
+
+    }
+    public function productEdit(Product $product) {
+
+        $typologies = Typology::all();
+        $categories = Category::all();
+
+        return view('pages.products.edit', compact('product', 'categories', 'typologies'));
+
+    }
+    public function productUpdate(Request $request, Product $product) {
+
+        $typologies = Typology::all();
+        $categories = Category::all();
+
+        $data = $request -> validate([
+            'name' => 'required|string|max:64',
+            'description' => 'nullable|string',
+            'price' => 'required|integer',
+            'weight' => 'required|integer',
+            'typology_id' => 'required|integer',
+            'categories' => 'required|array',
+        ]);
+
+        $product -> update($data);
+
+        $typology = Typology :: find($data['typology_id']);
+
+        $product -> typology() -> associate($typology);
+        $product -> save();
+        
+        $categories = Category :: find($data['categories']);
+        $product -> categories() -> sync($categories);
+
+        return redirect() -> route('productHome');
 
     }
     public function productStore(Request $request) {

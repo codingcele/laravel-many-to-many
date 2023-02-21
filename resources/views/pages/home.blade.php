@@ -3,20 +3,16 @@
 @section('content')
     <div class="container">
         <h1>
-            PRODUCTS
+            PRODUCTS:
         </h1>
         <a href="{{ route('product.create') }}">ADD NEW PRODUCT</a>
         @foreach ($categories as $category)
-            <h3>
+            <h4>
                 {{ $category -> name }}
-            </h3>
+            </h4>
             <ul>
                 @foreach ($category -> products as $product)
-                    <li>
-                        {{ $product -> code }} - {{ $product -> name }} <br>
-                        {{ $product -> typology -> name }} <br>
-                        DIGITAL: {{ $product -> typology -> digital ? "Yes" : "No" }}
-                    </li>
+                    @include('components.product')
                 @endforeach
             </ul>
         @endforeach
