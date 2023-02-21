@@ -51,9 +51,6 @@ class MainController extends Controller
     }
     public function productUpdate(Request $request, Product $product) {
 
-        $typologies = Typology::all();
-        $categories = Category::all();
-
         $data = $request -> validate([
             'name' => 'required|string|max:64',
             'description' => 'nullable|string',
@@ -76,6 +73,7 @@ class MainController extends Controller
         return redirect() -> route('productHome');
 
     }
+
     public function productStore(Request $request) {
 
         $data = $request -> validate([
